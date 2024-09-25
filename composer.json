@@ -1,0 +1,31 @@
+{
+  "name": "berkanumutlu/php-captcha",
+  "type": "project",
+  "description": "PHP Captcha by Berkan Ümütlü",
+  "keywords": [
+    "php",
+    "captcha",
+    "php captcha"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Berkan Ümütlü",
+      "role": "Developer"
+    }
+  ],
+  "homepage": "https://github.com/berkanumutlu/php-captcha",
+  "support": {
+    "issues": "https://github.com/berkanumutlu/php-captcha/issues",
+    "security": "https://github.com/berkanumutlu/php-captcha/security/policy"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/",
+      "App\\Library\\": "src/lib/"
+    }
+  },
+  "require": {
+    "php": ">=5.6"
+  }
+}
