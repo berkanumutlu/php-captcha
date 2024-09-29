@@ -26,8 +26,7 @@
       "App\\Config\\": "src/config/"
     },
     "files": [
-      "src/lib/*",
-      "src/config/*"
+      "src/lib/functions.php"
     ]
   },
   "require": {
