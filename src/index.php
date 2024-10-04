@@ -1,3 +1,6 @@
+<?php
+require_once '../vendor/autoload.php';
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -27,9 +30,9 @@
                 <div class="card-body">
                     <nav class="mb-4">
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <button class="nav-link active" id="nav-item1-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-item1" type="button" role="tab" aria-controls="nav-item1"
-                                    aria-selected="true">Item 1
+                            <button class="nav-link active" id="nav-google-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-google" type="button" role="tab" aria-controls="nav-google"
+                                    aria-selected="true">Google reCAPTCHA
                             </button>
                             <button class="nav-link" id="nav-item2-tab" data-bs-toggle="tab"
                                     data-bs-target="#nav-item2" type="button" role="tab" aria-controls="nav-item2"
@@ -38,8 +41,38 @@
                         </div>
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active" id="nav-item1" role="tabpanel"
-                             aria-labelledby="nav-item1-tab" tabindex="0">Item 1 Content
+                        <div class="tab-pane fade show active" id="nav-google" role="tabpanel"
+                             aria-labelledby="nav-google-tab" tabindex="0">
+                            <form action="ajax.php" method="POST" class="form-google input-group-form">
+                                <input type="hidden" name="google_form" value="1">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="subject">Subject</label>
+                                            <input type="text" id="subject" name="subject" class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="message">Message</label>
+                                            <textarea name="message" id="message" class="form-control" cols="30"
+                                                      rows="5" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mb-3 d-flex justify-content-center">
+                                            <?php
+                                            $recaptcha = new \App\Library\Captcha('recaptcha');
+                                            echo $recaptcha->get_html_element();
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php include 'assets/web/components/_button_form_submit.html'; ?>
+                            </form>
+                            <?php include 'assets/web/components/_alert.html'; ?>
+                            <?php include 'assets/web/components/_code_block.html'; ?>
                         </div>
                         <div class="tab-pane fade" id="nav-item2" role="tabpanel" aria-labelledby="nav-item2-tab"
                              tabindex="0">Item 2 Content
@@ -60,5 +93,6 @@
 <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/plugins/highlight.js/highlight.min.js"></script>
 <script src="assets/web/js/main.js"></script>
+<?php echo $recaptcha->get_script_file(); ?>
 </body>
 </html>
