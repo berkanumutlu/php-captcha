@@ -5,11 +5,11 @@ namespace App\Library\Captcha;
 use function App\Library\Functions\get_config;
 use function App\Library\Functions\get_ip_address;
 
-class Google extends CaptchaAbstract
+class HCaptcha extends CaptchaAbstract
 {
     public function __construct()
     {
-        $config = get_config('recaptcha');
+        $config = get_config('hcaptcha');
         if (!empty($config)) {
             $this->setApiUrl($config['api_url']);
             $this->setScriptFileUrl($config['script_file_url']);
@@ -40,7 +40,7 @@ class Google extends CaptchaAbstract
      */
     public function get_html_element()
     {
-        return '<div class="g-recaptcha" data-sitekey="'.$this->getSiteKey().'"></div>';
+        return '<div class="h-captcha" data-sitekey="'.$this->getSiteKey().'"></div>';
     }
 
     /**
@@ -50,10 +50,10 @@ class Google extends CaptchaAbstract
     public function validate(array $action = null)
     {
         $response = new CaptchaResponse();
-        if (!empty($action['g-recaptcha-response'])) {
+        if (!empty($action['h-captcha-response'])) {
             $data = [
                 'secret'   => $this->getSecretKey(),
-                'response' => $action['g-recaptcha-response'],
+                'response' => $action['h-captcha-response'],
                 'remoteip' => get_ip_address()
             ];
             $curl_client = curl_init();
