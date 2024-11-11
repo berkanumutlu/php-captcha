@@ -18,6 +18,8 @@ It is a project that includes examples of how captcha verification processes are
 
 - Google reCAPTCHA
 ![Google reCAPTCHA](screenshots/reCAPTCHA.png)
+- hCaptcha
+![hCaptcha](screenshots/hCaptcha.png)
 
 ## License
 
