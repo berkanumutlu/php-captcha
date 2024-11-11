@@ -76,15 +76,15 @@ abstract class CaptchaAbstract
     /**
      * @return string
      */
-    abstract function get_script_file($parameters = null);
+    abstract protected function get_script_file($parameters = null);
 
     /**
      * @return string
      */
-    abstract function get_html_element();
+    abstract public function get_html_element();
 
     /**
      * @param  array|null  $action
      */
-    abstract function validate(array $action = null);
+    abstract public function validate(array $action = null);
 }

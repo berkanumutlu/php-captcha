@@ -1,5 +1,7 @@
 <?php
 require_once '../vendor/autoload.php';
+$recaptcha = new \App\Library\Captcha('recaptcha');
+$hcaptcha = new \App\Library\Captcha('hcaptcha');
 ?>
 <!doctype html>
 <html lang="en">
@@ -34,9 +36,9 @@ require_once '../vendor/autoload.php';
                                     data-bs-target="#nav-google" type="button" role="tab" aria-controls="nav-google"
                                     aria-selected="true">Google reCAPTCHA
                             </button>
-                            <button class="nav-link" id="nav-item2-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-item2" type="button" role="tab" aria-controls="nav-item2"
-                                    aria-selected="false">Item 2
+                            <button class="nav-link" id="nav-hcaptcha-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-hcaptcha" type="button" role="tab" aria-controls="nav-hcaptcha"
+                                    aria-selected="false">hCaptcha
                             </button>
                         </div>
                     </nav>
@@ -61,11 +63,8 @@ require_once '../vendor/autoload.php';
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <div class="mb-3 d-flex justify-content-center">
-                                            <?php
-                                            $recaptcha = new \App\Library\Captcha('recaptcha');
-                                            echo $recaptcha->get_html_element();
-                                            ?>
+                                        <div id="captcha-container-google" class="mb-3 d-flex justify-content-center">
+
                                         </div>
                                     </div>
                                 </div>
@@ -74,8 +73,35 @@ require_once '../vendor/autoload.php';
                             <?php include 'assets/web/components/_alert.html'; ?>
                             <?php include 'assets/web/components/_code_block.html'; ?>
                         </div>
-                        <div class="tab-pane fade" id="nav-item2" role="tabpanel" aria-labelledby="nav-item2-tab"
-                             tabindex="0">Item 2 Content
+                        <div class="tab-pane fade" id="nav-hcaptcha" role="tabpanel" aria-labelledby="nav-hcaptcha-tab"
+                             tabindex="0">
+                            <form action="ajax.php" method="POST" class="form-hcaptcha input-group-form">
+                                <input type="hidden" name="hcaptcha_form" value="1">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="subject">Subject</label>
+                                            <input type="text" id="subject" name="subject" class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="message">Message</label>
+                                            <textarea name="message" id="message" class="form-control" cols="30"
+                                                      rows="5" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div id="captcha-container-hcaptcha" class="mb-3 d-flex justify-content-center">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php include 'assets/web/components/_button_form_submit.html'; ?>
+                            </form>
+                            <?php include 'assets/web/components/_alert.html'; ?>
+                            <?php include 'assets/web/components/_code_block.html'; ?>
                         </div>
                     </div>
                 </div>
@@ -93,6 +119,62 @@ require_once '../vendor/autoload.php';
 <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/plugins/highlight.js/highlight.min.js"></script>
 <script src="assets/web/js/main.js"></script>
-<?php echo $recaptcha->get_script_file(); ?>
+<script>
+    jQuery(function ($) {
+        const captchaConfig = {
+            recaptcha: {
+                script: "<?= addslashes($recaptcha->get_script_file_url()) ?>",
+                html: "<?= addslashes($recaptcha->get_html_element()) ?>"
+            },
+            hcaptcha: {
+                script: "<?= addslashes($hcaptcha->get_script_file_url()) ?>",
+                html: "<?= addslashes($hcaptcha->get_html_element()) ?>"
+            }
+        };
+
+        function loadCaptcha(type) {
+            removeCaptchaScriptAndElement();
+            let src, containerId;
+            if (type === 'recaptcha') {
+                src = captchaConfig.recaptcha.script;
+                containerId = 'captcha-container-google';
+                document.getElementById(containerId).innerHTML = captchaConfig.recaptcha.html;
+            } else if (type === 'hcaptcha') {
+                src = captchaConfig.hcaptcha.script;
+                containerId = 'captcha-container-hcaptcha';
+                document.getElementById(containerId).innerHTML = captchaConfig.hcaptcha.html;
+            }
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = true;
+            script.defer = true;
+            script.onload = () => {
+                if (type === 'hcaptcha') {
+                    setTimeout(() => {
+                        window.hcaptcha.render(containerId, {
+                            sitekey: document.getElementById(containerId).querySelector('[data-sitekey]').getAttribute('data-sitekey')
+                        });
+                    }, 100);
+                }
+            };
+            document.head.appendChild(script);
+        }
+
+        function removeCaptchaScriptAndElement() {
+            const existingScripts = document.querySelectorAll('script[src*="recaptcha"], script[src*="hcaptcha"]');
+            existingScripts.forEach(script => script.remove());
+            document.getElementById('captcha-container-google').innerHTML = '';
+            document.getElementById('captcha-container-hcaptcha').innerHTML = '';
+        }
+
+        document.getElementById('nav-google-tab').addEventListener('click', function () {
+            loadCaptcha('recaptcha');
+        });
+        document.getElementById('nav-hcaptcha-tab').addEventListener('click', function () {
+            loadCaptcha('hcaptcha');
+        });
+        loadCaptcha('recaptcha');
+    });
+</script>
 </body>
 </html>
