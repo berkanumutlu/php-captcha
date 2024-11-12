@@ -5,11 +5,11 @@ namespace App\Library\Captcha;
 use function App\Library\Functions\get_config;
 use function App\Library\Functions\get_ip_address;
 
-class HCaptcha extends CaptchaAbstract
+class Turnstile extends CaptchaAbstract
 {
     public function __construct()
     {
-        $config = get_config('hcaptcha');
+        $config = get_config('turnstile');
         if (!empty($config)) {
             $this->setApiUrl($config['api_url']);
             $this->setScriptFileUrl($config['script_file_url']);
@@ -22,7 +22,7 @@ class HCaptcha extends CaptchaAbstract
      * @param $parameters
      * @return string
      */
-    protected function get_script_file($parameters = null)
+    public function get_script_file($parameters = null)
     {
         return '<script src="'.$this->getScriptFileUrl().'" async defer></script>';
     }
@@ -40,7 +40,7 @@ class HCaptcha extends CaptchaAbstract
      */
     public function get_html_element()
     {
-        return '<div class="h-captcha" data-sitekey="'.$this->getSiteKey().'"></div>';
+        return '<div class="cf-turnstile" data-sitekey="'.$this->getSiteKey().'"></div>';
     }
 
     /**
@@ -50,10 +50,10 @@ class HCaptcha extends CaptchaAbstract
     public function validate(array $action = null)
     {
         $response = new CaptchaResponse();
-        if (!empty($action['h-captcha-response'])) {
+        if (!empty($action['cf-turnstile-response'])) {
             $data = [
                 'secret'   => $this->getSecretKey(),
-                'response' => $action['h-captcha-response'],
+                'response' => $action['cf-turnstile-response'],
                 'remoteip' => get_ip_address()
             ];
             $curl_client = curl_init();

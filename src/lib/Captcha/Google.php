@@ -19,20 +19,20 @@ class Google extends CaptchaAbstract
     }
 
     /**
-     * @return mixed
-     */
-    public function get_script_file_url()
-    {
-        return $this->getScriptFileUrl();
-    }
-
-    /**
      * @param $parameters
      * @return string
      */
     protected function get_script_file($parameters = null)
     {
         return '<script src="'.$this->getScriptFileUrl().'" async defer></script>';
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function get_script_file_url()
+    {
+        return $this->getScriptFileUrl();
     }
 
     /**
@@ -62,6 +62,7 @@ class Google extends CaptchaAbstract
             curl_setopt($curl_client, CURLOPT_POSTFIELDS, http_build_query($data));
             curl_setopt($curl_client, CURLOPT_RETURNTRANSFER, true);
             $response_json = curl_exec($curl_client);
+            curl_close($curl_client);
             $response_data = json_decode($response_json);
             $response->setResponse($response_data)->setStatus($response_data->success);
         }

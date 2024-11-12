@@ -81,6 +81,11 @@ abstract class CaptchaAbstract
     /**
      * @return string
      */
+    abstract public function get_script_file_url();
+
+    /**
+     * @return string
+     */
     abstract public function get_html_element();
 
     /**

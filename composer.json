@@ -5,7 +5,12 @@
   "keywords": [
     "php",
     "captcha",
-    "php captcha"
+    "php captcha",
+    "recaptcha",
+    "hcaptcha",
+    "cloudflare",
+    "turnstile",
+    "cloudflare turnstile"
   ],
   "license": "MIT",
   "authors": [
