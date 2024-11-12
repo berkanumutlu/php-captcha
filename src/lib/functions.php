@@ -47,3 +47,18 @@ function get_ip_address()
     }
     return $ip_address;
 }
+
+/**
+ * @param $action
+ * @param $method
+ * @param $captcha
+ * @return mixed
+ */
+function include_captcha_form($action = '', $method = '', $captcha = '')
+{
+    global $actionUrl, $methodType, $captchaType;
+    $actionUrl = $action;
+    $methodType = $method;
+    $captchaType = $captcha;
+    return include __DIR__.'/../assets/web/components/_captcha_form.php';
+}

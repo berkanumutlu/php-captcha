@@ -2,8 +2,6 @@
 
 namespace App\Library;
 
-use App\Library\Captcha\Google;
-use App\Library\Captcha\HCaptcha;
 use function App\Library\Functions\get_config;
 
 class Captcha
@@ -15,10 +13,13 @@ class Captcha
         $captcha = !empty($captcha) ? $captcha : get_config('captcha_type');
         switch ($captcha) {
             case 'recaptcha':
-                $this->setCaptcha(new Google());
+                $this->setCaptcha(new \App\Library\Captcha\Google());
                 break;
             case 'hcaptcha':
-                $this->setCaptcha(new HCaptcha());
+                $this->setCaptcha(new \App\Library\Captcha\HCaptcha());
+                break;
+            case 'turnstile':
+                $this->setCaptcha(new \App\Library\Captcha\Turnstile());
                 break;
         }
     }

@@ -15,5 +15,11 @@ return [
         'script_file_url' => 'https://js.hcaptcha.com/1/api.js',
         'site_key'        => 'YOUR_SITE_KEY',
         'secret_key'      => 'YOUR_SECRET_KEY'
+    ],
+    'turnstile'    => [
+        'api_url'         => 'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+        'script_file_url' => 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit',
+        'site_key'        => 'YOUR_SITE_KEY',
+        'secret_key'      => 'YOUR_SECRET_KEY'
     ]
 ];
